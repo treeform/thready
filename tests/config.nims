@@ -1,1 +1,3 @@
 --path:"../src"
+--threads:on
+--gc:arc
