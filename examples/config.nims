@@ -1,4 +1,0 @@
---threads:on
---debugger:native
---gc:arc
---path:"../src"
