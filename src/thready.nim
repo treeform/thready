@@ -55,7 +55,6 @@ macro sync*(body: untyped) =
     {.gcsafe.}:
       `body`
     release(globalLocks[`lockCounter`])
-  echo repr stmts
   inc lockCounter
   return stmts
 
@@ -70,7 +69,6 @@ macro sync*(name, body: untyped) =
     {.gcsafe.}:
       `body`
     release(globalLocks[`lockIndex`])
-  echo repr stmts
   return stmts
 
 proc wait*() =

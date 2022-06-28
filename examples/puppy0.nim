@@ -1,4 +1,4 @@
-import thready, puppy, tables
+import puppy, tables
 
 var data: Table[string, string]
 

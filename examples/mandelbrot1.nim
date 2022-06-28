@@ -1,4 +1,3 @@
-# Producer consumer with thready threads:
 import thready, pixie
 
 proc mandelbrot(uv: Vec2): Color =
@@ -13,7 +12,7 @@ proc mandelbrot(uv: Vec2): Color =
 
 var image = newImage(1000, 1000)
 
-proc darwTile(uv: Vec2) =
+proc drawTile(uv: Vec2) =
   var tile = newImage(100, 100)
   for y in 0 ..< 100:
     for x in 0 ..< 100:
@@ -25,8 +24,8 @@ proc darwTile(uv: Vec2) =
 for by in 0 ..< 10:
   for bx in 0 ..< 10:
     let pos = vec2(by.float32*100, bx.float32*100)
-    darwTile(pos)
+    discard spawn drawTile(pos)
 
 wait()
 
-image.writeFile("mandelbrot.png")
+image.writeFile("examples/mandelbrot1.png")

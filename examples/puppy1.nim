@@ -16,6 +16,7 @@ discard spawn getUrl("https://github.com/treeform/vmath")
 
 wait() # <-- wait for 3 spawned threads to finish
 
-sync(data): # <-- synchronize access to data
-  for url in data.keys:
-    echo "* ", url, " - ", data[url].len, " bytes"
+# We could put data in a sync block, but because we know
+# that all threads have finished there is no need.
+for url in data.keys:
+  echo "* ", url, " - ", data[url].len, " bytes"
