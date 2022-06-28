@@ -162,13 +162,15 @@ done: https://github.com/treeform/vmath - 178033 bytes
 * https://github.com/treeform/puppy - 171422 bytes
 ```
 
+> Note: You could have used `{.async.}` to do similar download, but async does not support DNS async (yes its blocks on DNS) and it does not support gzip encoding (which it would also block on as its single threaded).
+
 ## Tutorial - Pixie
 
 Here we will draw mandelbrot - a CPU heavy task.
 
 ![mandelbrot](examples/mandelbrot1.png)
 
-Without threads:
+Without threads, but with drawing each image in a 100x100 tile:
 
 ```nim
 import pixie

@@ -44,17 +44,18 @@ proc workerFunction(i: int) {.thread.} =
 template spawn*(something: untyped): Threadlet =
   var t = Threadlet()
   t.task = toTask something
-  acquire(globalTasksLock)
-  globalTasks.add t
-  release(globalTasksLock)
+  withLock(globalTasksLock):
+    globalTasks.add t
   t
 
 macro sync*(body: untyped) =
   let stmts = quote do:
     acquire(globalLocks[`lockCounter`])
-    {.gcsafe.}:
-      `body`
-    release(globalLocks[`lockCounter`])
+    try:
+      {.gcsafe.}:
+        `body`
+    finally:
+      release(globalLocks[`lockCounter`])
   inc lockCounter
   return stmts
 
@@ -66,17 +67,18 @@ macro sync*(name, body: untyped) =
   let lockIndex = lockNames[nameStr]
   let stmts = quote do:
     acquire(globalLocks[`lockIndex`])
-    {.gcsafe.}:
-      `body`
-    release(globalLocks[`lockIndex`])
+    try:
+      {.gcsafe.}:
+        `body`
+    finally:
+      release(globalLocks[`lockIndex`])
   return stmts
 
 proc wait*() =
   while true:
-    acquire(globalTasksLock)
-    if globalTasks.len == 0 and globalThreadsRunning == 0:
-      break
-    release(globalTasksLock)
+    withLock(globalTasksLock):
+      if globalTasks.len == 0 and globalThreadsRunning == 0:
+        break
     sleep(0)
 
 proc wait*(t: Threadlet) =
