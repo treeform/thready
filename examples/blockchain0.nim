@@ -1,7 +1,5 @@
 import std/random, std/sha1, strutils, thready
 
-randomize()
-
 const difficulty = "0000"
 var blockChain: seq[string]
 blockChain.add("5F603E799CBD068591F2F4A0F1327A5D7D6A2000")
@@ -15,8 +13,8 @@ proc hasher() =
     if blockChain.len > 20:
       return
     prevHash = blockChain[^1]
-    let salt = r.rand(int.high)
-    let hash = $secureHash(prevHash & $salt)
+    let nonce = r.rand(int.high)
+    let hash = $secureHash(prevHash & $nonce)
     if hash.endsWith(difficulty):
       echo "solved the hash"
       blockChain.add(hash)
